@@ -1,0 +1,8 @@
+node_modules/
+dist/
+
+.gitignore
+package.json
+packages/**/package.json
+pnpm-lock.yaml
+pnpm-workspace.yaml

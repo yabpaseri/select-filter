@@ -1,7 +1,7 @@
 {
   "name": "select-filter",
   "private": true,
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "author": "yabpaseri",
   "description": "Extension to filter options in select tags.",
@@ -12,7 +12,7 @@
     "verup": "npm version --no-git-tag-version"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "2.0.0-beta.23",
+    "@crxjs/vite-plugin": "2.0.0-beta.26",
     "@types/archiver": "^6.0.2",
     "@types/chrome": "^0.0.257",
     "@types/node": "18",
@@ -25,5 +25,8 @@
     "sass": "^1.69.7",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
+  },
+  "volta": {
+    "node": "18.20.4"
   }
 }

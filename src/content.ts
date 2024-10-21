@@ -8,11 +8,6 @@ declare global {
 		store?: HTMLSelectElement;
 		/** 元のoptionを再現するための情報 */
 		relation?: { parent: HTMLElement; option: HTMLOptionElement }[];
-
-		/** @deprecated */
-		selectEl: HTMLSelectElement;
-		/** @deprecated */
-		selectHidden: HTMLSelectElement;
 	}
 	interface HTMLSelectElement {
 		/** selectの絞り込みを行うinput */
@@ -27,7 +22,7 @@ declare global {
 	const SPACE_REGEX = /\s+/g;
 	const escapeRegExpPattern = (pattern: string): string => pattern.replace(EXCAPE_REGEXP_PATTERN_REGEX, '\\$&');
 
-	function handleKeyup(ev: KeyboardEvent) {
+	function handleKeyup(ev: Event) {
 		if (!(ev.target instanceof HTMLInputElement)) return;
 		const selectEle = ev.target.filterTarget;
 		const store = ev.target.store;
@@ -61,6 +56,13 @@ declare global {
 		if (!(ev.commandKey && ev.target instanceof HTMLSelectElement)) return;
 		// DOMから消す
 		if (ev.target.filterBy != null) {
+			if (ev.target.filterBy.store && ev.target.filterBy.relation) {
+				ev.target.filterBy.store.append(...[...ev.target.options]);
+				for (const r of ev.target.filterBy.relation) {
+					r.parent.append(r.option);
+				}
+				ev.target.selectedIndex = -1;
+			}
 			ev.target.filterBy.remove();
 			ev.target.filterBy = void 0;
 		}
@@ -81,7 +83,7 @@ declare global {
 		inputEle.filterTarget = ev.target;
 		inputEle.store = store;
 		inputEle.relation = relation;
-		inputEle.addEventListener('keyup', handleKeyup);
+		inputEle.addEventListener('input', handleKeyup);
 
 		const spanEle = new UIBuilder('span').classes('webextension', 'select-tag-filter').done();
 		ev.target.before(spanEle);
@@ -91,6 +93,8 @@ declare global {
 		ev.target.wrappedBy = spanEle;
 		ev.target.style.width = `${ev.target.offsetWidth}px`;
 		ev.target.before(new UIBuilder('div').append(inputEle).done());
+
+		inputEle.focus();
 	});
 })();
 
